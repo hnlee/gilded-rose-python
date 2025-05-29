@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import argparse
 
 class GildedRose(object):
 
@@ -44,3 +45,19 @@ class Item:
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Gilded Rose")
+    parser.add_argument("--name", type=str, help="Name of the item")
+    parser.add_argument("--sell-in", type=int, help="Sell in days")
+    parser.add_argument("--quality", type=int, help="Quality of the item")
+    parser.add_argument("--days", type=int, default=1, help="Number of days")
+    args = parser.parse_args()
+
+    item = Item(args.name, args.sell_in, args.quality)
+    print(f"Day 0: {item.name}, sell in {item.sell_in} days, {item.quality} quality")
+    gilded_rose = GildedRose([item])
+    for n in range(args.days):
+        gilded_rose.update_quality()
+        print(f"Day {n+1}: {item.name}, sell in {item.sell_in} days, {item.quality} quality")
