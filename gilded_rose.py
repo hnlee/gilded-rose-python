@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 import argparse
+from Item import ItemController, ItemFactory, Item
 
 class GildedRose(object):
 
     def __init__(self, items):
         self.items = items
+        self.items_controller = ItemController(self.items)
 
     def update_quality(self):
+        self.items = self.items_controller.update_quality()
+
+    # @deprecated
+    def update_quality_deprecated(self):
         for item in self.items:
             
             if item.name == 'Conjured':
@@ -48,16 +54,6 @@ class GildedRose(object):
                 else:
                     if item.quality < 50:
                         item.quality = item.quality + 1
-
-
-class Item:
-    def __init__(self, name, sell_in, quality):
-        self.name = name
-        self.sell_in = sell_in
-        self.quality = quality
-
-    def __repr__(self):
-        return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
 
 if __name__ == "__main__":
