@@ -1,13 +1,30 @@
 # -*- coding: utf-8 -*-
 import argparse
+from Item import ItemController, ItemFactory, Item
 
 class GildedRose(object):
 
     def __init__(self, items):
         self.items = items
+        self.items_controller = ItemController(self.items)
 
     def update_quality(self):
+        self.items = self.items_controller.update_quality()
+
+    # @deprecated
+    def update_quality_deprecated(self):
         for item in self.items:
+            
+            if item.name == 'Conjured':
+                
+                if item.sell_in > 0:
+                    item.quality = max(item.quality - 2, 0)
+                else:
+                    item.quality = max(item.quality - 4, 0)
+                item.sell_in -= 1
+                continue
+            
+            
             if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
                 if item.quality > 0:
                     if item.name != "Sulfuras, Hand of Ragnaros":
@@ -22,8 +39,10 @@ class GildedRose(object):
                         if item.sell_in < 6:
                             if item.quality < 50:
                                 item.quality = item.quality + 1
+                    
             if item.name != "Sulfuras, Hand of Ragnaros":
                 item.sell_in = item.sell_in - 1
+            
             if item.sell_in < 0:
                 if item.name != "Aged Brie":
                     if item.name != "Backstage passes to a TAFKAL80ETC concert":
@@ -35,16 +54,6 @@ class GildedRose(object):
                 else:
                     if item.quality < 50:
                         item.quality = item.quality + 1
-
-
-class Item:
-    def __init__(self, name, sell_in, quality):
-        self.name = name
-        self.sell_in = sell_in
-        self.quality = quality
-
-    def __repr__(self):
-        return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
 
 if __name__ == "__main__":
